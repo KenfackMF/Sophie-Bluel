@@ -199,12 +199,53 @@ footer nav ul {
 }
 
 .tous{
+	display: flex;
 	color: white;
 	width: 100px;
 	height: 40px;
-	text-align: center;
+	align-items: center;
+	justify-content: center;
 	background-color: #1D6154;
 	border-radius: 60px;
+	font-family: 'Syne';
+	font-weight: 700;
+}	
+
+.objet{
+	display: flex;
+	width: 100px;
+	height: 40px;
+	align-items: center;
+	justify-content: center;
+	border-radius: 60px;
+	border: 1px solid #1D6154;
+	color: #1D6154;
+	font-family: 'Syne';
+	font-weight: 700;
+}	
+
+.hotel{
+	display: flex;
+	width: 200px;
+	height: 40px;
+	align-items: center;
+	justify-content: center;
+	border-radius: 60px;
+	border: 1px solid #1D6154;
+	color: #1D6154;
+	font-family: 'Syne';
+	font-weight: 700;
+}	
+
+.appart{
+	display: flex;
+	width: 150px;
+	height: 40px;
+	align-items: center;
+	justify-content: center;
+	border-radius: 60px;
+	border: 1px solid #1D6154;
+	color: #1D6154;
 	font-family: 'Syne';
 	font-weight: 700;
 }	
