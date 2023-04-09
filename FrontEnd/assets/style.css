@@ -186,3 +186,25 @@ footer nav ul {
 	margin: 2em
 }
 
+
+.nav-gallery{
+	display: flex;
+	justify-content: center;
+	height: 50px;
+	font-size: 1rem;
+	font-family: 'Syne';
+	margin: 30px 0;
+	gap: 1rem;
+	
+}
+
+.tous{
+	color: white;
+	width: 100px;
+	height: 40px;
+	text-align: center;
+	background-color: #1D6154;
+	border-radius: 60px;
+	font-family: 'Syne';
+	font-weight: 700;
+}	
