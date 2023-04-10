@@ -187,15 +187,20 @@ footer nav ul {
 }
 
 
-.nav-gallery{
+#categories{
 	display: flex;
 	justify-content: center;
-	height: 50px;
+	height: 40px;
 	font-size: 1rem;
 	font-family: 'Syne';
 	margin: 30px 0;
 	gap: 1rem;
 	
+}
+
+button:hover{
+	cursor: pointer;
+	transition: ease .5s;
 }
 
 .tous{
@@ -209,7 +214,9 @@ footer nav ul {
 	border-radius: 60px;
 	font-family: 'Syne';
 	font-weight: 700;
+	border: none;
 }	
+
 
 .objet{
 	display: flex;
@@ -219,6 +226,7 @@ footer nav ul {
 	justify-content: center;
 	border-radius: 60px;
 	border: 1px solid #1D6154;
+	background-color: white;
 	color: #1D6154;
 	font-family: 'Syne';
 	font-weight: 700;
@@ -232,6 +240,7 @@ footer nav ul {
 	justify-content: center;
 	border-radius: 60px;
 	border: 1px solid #1D6154;
+	background-color: white;
 	color: #1D6154;
 	font-family: 'Syne';
 	font-weight: 700;
@@ -245,7 +254,27 @@ footer nav ul {
 	justify-content: center;
 	border-radius: 60px;
 	border: 1px solid #1D6154;
+	background-color: white;
 	color: #1D6154;
 	font-family: 'Syne';
 	font-weight: 700;
 }	
+
+.objet:active{
+	background-color: #0E2F28;
+}
+
+.log:hover{
+	cursor: pointer;
+}
+h1 a{
+    text-decoration: none;
+    list-style-type: none;
+    color: #B1663C;
+}
+
+.log{
+    text-decoration: none;
+    list-style-type: none;
+    color: black;
+}
