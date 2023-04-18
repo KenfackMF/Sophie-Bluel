@@ -53,7 +53,8 @@ form{
     margin-bottom: 4rem;
 }
 
-p{
+label{
+    display: block;
     font-family: 'Work sans';
     font-weight: 500;
     font-size: 1rem;
@@ -93,5 +94,9 @@ transform: scale(1.03);}
 .log{
     text-decoration: none;
     list-style-type: none;
-    color: #B1663C;
+    color: #000000;
 }
+
+#erreurSaisi {
+    display: block;
+  }

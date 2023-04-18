@@ -203,70 +203,30 @@ button:hover{
 	transition: ease .5s;
 }
 
-.tous{
+.category-button{
 	display: flex;
-	color: white;
-	width: 100px;
+	color: #1D6154;
+	width: auto;
 	height: 40px;
 	align-items: center;
 	justify-content: center;
-	background-color: #1D6154;
 	border-radius: 60px;
 	font-family: 'Syne';
 	font-weight: 700;
-	border: none;
-}	
-
-
-.objet{
-	display: flex;
-	width: 100px;
-	height: 40px;
-	align-items: center;
-	justify-content: center;
-	border-radius: 60px;
 	border: 1px solid #1D6154;
 	background-color: white;
 	color: #1D6154;
-	font-family: 'Syne';
-	font-weight: 700;
+	padding: 1rem;
 }	
 
-.hotel{
-	display: flex;
-	width: 200px;
-	height: 40px;
-	align-items: center;
-	justify-content: center;
-	border-radius: 60px;
-	border: 1px solid #1D6154;
-	background-color: white;
-	color: #1D6154;
-	font-family: 'Syne';
-	font-weight: 700;
-}	
 
-.appart{
-	display: flex;
-	width: 150px;
-	height: 40px;
-	align-items: center;
-	justify-content: center;
-	border-radius: 60px;
-	border: 1px solid #1D6154;
-	background-color: white;
-	color: #1D6154;
-	font-family: 'Syne';
-	font-weight: 700;
-}	
 
-.objet:active{
-	background-color: #0E2F28;
-}
 
 .log:hover{
 	cursor: pointer;
 }
+
+
 h1 a{
     text-decoration: none;
     list-style-type: none;
