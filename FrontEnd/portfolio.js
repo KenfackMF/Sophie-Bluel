@@ -155,7 +155,7 @@ const logoutLi = document.createElement('li');
 const logoutLink = document.createElement('a');
 logoutLink.href = '#';
 logoutLink.textContent = 'logout';
-logoutLink.className = 'deconexion';
+logoutLink.className = 'log-out';
 logoutLi.appendChild(logoutLink);
 
 // Ajout d'un écouteur d'événement sur le bouton de déconnexion
@@ -178,7 +178,7 @@ if (localStorage.getItem('token')) {
 
 
 }
-
+// Créer l'icone et modifier sur le titre
 const title = document.querySelector('article');
 title.classList.add('titre');
 
@@ -195,7 +195,7 @@ edition.classList.add('btn-modifier1');
 edition.innerText = 'Modifier';
 editionButton1.appendChild(edition);
 
-
+// Créer l'icone et modifier sous l'image
 const titlePicture = document.querySelector('figure');
 titlePicture.classList.add('image-titre');
 
@@ -213,22 +213,19 @@ edition2.innerText = 'Modifier';
 editionButton2.appendChild(edition2);
 
 
-
-
   
   // créer le bouton "Modifier" pour ouvrir la modale
   const editionButton = document.createElement('button');
   editionButton.textContent = 'Modifier';
   editionButton.classList.add('btn-modifier');
-
-
   
   
+  // Masquer les catégories
   const modaleOpening = document.querySelector('h2.projets');
   editionButton.appendChild(icone);
   modaleOpening.appendChild(editionButton);
   
-  // Masquer les catégories
+
   const categoriesDiv = document.getElementById("categories");
   if (categoriesDiv) {
     categoriesDiv.style.display = "none";
@@ -302,10 +299,8 @@ function genererCatalogue2(catalogueModal) {
     img.src = catalogueModal[i].imageUrl;
     img.alt = catalogueModal[i].title;
 
-   
-
     // créer un bouton de suppression pour chaque image
-    const deleteButton = document.createElement('i');
+    const deleteButton = document.createElement('button');
     deleteButton.className = 'delete-button';
     deleteButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
 
@@ -339,6 +334,39 @@ function genererCatalogue2(catalogueModal) {
 
     // ajouter l'élément div imgContainer à l'élément div galleryModal
     galleryModal.appendChild(imgContainer);
+
+
+  // Ajouter un écouteur d'événement "click" sur le bouton de suppression "deleteButton" de chaque image
+  const deleteButtons = document.querySelectorAll('.delete-button');
+  deleteButtons.forEach((deleteButton) => {
+    deleteButton.addEventListener('click', () => {
+      const imageId = deleteButton.parentNode.dataset.id;
+          
+      const imgContainer = deleteButton.parentNode;
+      imgContainer.parentNode.removeChild(imgContainer);
+      
+      fetch(`http://localhost:5678/api/works/${imageId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Une erreur est survenue lors de la suppression de l\'image');
+        }else{
+          alert('Projet supprimer avec succès !')
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    });
+  });
+
+
+
+
   }
 
   // ajouter l'élément div galleryModal à l'élément modalContent (à définir ailleurs)
@@ -410,45 +438,92 @@ function genererCatalogue2(catalogueModal) {
     modalContent2.appendChild(blueRectangle);
 
     const imageLost = document.createElement('i');
-    imageLost.classList.add = 'image-lost';
-    imageLost.innerHTML = '<i class="fa-solid fa-image"></i>';
-    modalContent2.appendChild(imageLost);
+    imageLost.innerHTML = '<i class="fa-regular fa-image"></i>';
+    blueRectangle.appendChild(imageLost);
 
     const texteAjout = document.createElement('button');
     texteAjout.classList.add('texte-ajout');
     texteAjout.textContent = 'Ajouter photo'
-    modalContent2.appendChild(texteAjout);
+    blueRectangle.appendChild(texteAjout);
 
+    const imgSize = document.createElement('p');
+    imgSize.classList.add = 'img-size';
+    imgSize.innerText = 'jpg, png : 4mo max';
+    blueRectangle.appendChild(imgSize);
 
     const titleLabel = document.createElement("label");
     titleLabel.innerHTML = "Titre";
+    titleLabel.classList.add('title-label');
     modalContent2.appendChild(titleLabel);
     const titleInput = document.createElement("input");
     titleInput.setAttribute("type", "text");
+    titleInput.classList.add('title-input');
     modalContent2.appendChild(titleInput);
 
     const catLabel = document.createElement("label");
-   catLabel.innerHTML = "Catégories";
+   catLabel.innerHTML = "Catégorie";
+   catLabel.classList.add('cat-label');
     modalContent2.appendChild(catLabel);
    const catInput = document.createElement("input");
   catInput.setAttribute("type", "text");
+  catInput.classList.add('cat-input');
     modalContent2.appendChild(catInput);
+
+    const traisGris2 = document.createElement('div');
+    traisGris2.className = 'ligne2';
+    modalContent2.appendChild(traisGris2);
   
-    modal2.appendChild(modalContent2);
-    document.body.appendChild(modal2);
-
-    closeButton2.addEventListener("click", function() {
-    modal2.style.display = "none";})
-
-
-    backButton.addEventListener("click", function() {
-      modal2.style.display = "none";
-      modal.style.display = "block";
-    });
-
-console.log(addPhotoButton);
   
-  } )
+  
+    // Le button ajout de photo
+    const validationButton = document.createElement('button');
+    validationButton.className = 'validation';
+    validationButton.textContent = 'Valider';
+    modalContent2.appendChild(validationButton);    
+  });
+
+
+
+  // Le button ajout de photo
+ const texteAjout = document.createElement('button');
+    texteAjout.classList.add('texte-ajout');
+    texteAjout.textContent = 'Ajouter photo'
+    blueRectangle.appendChild(texteAjout);
+
+// Ajouter un gestionnaire d'événements au bouton de validation
+validationButton.addEventListener('click', () => {
+  // Récupérer les valeurs des champs de titre et de catégorie
+  const title = titleInput.value;
+  const category = catInput.value;
+
+  // Créer un objet FormData avec les données du formulaire
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('category', category);
+
+  // Envoyer la requête POST avec les données du formulaire
+  fetch('http://localhost:5678/api/works', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    },
+    body: formData
+  })
+  .then(response => {
+    console.log(response)
+    if (!response.ok) {
+      throw new Error('Une erreur est survenue lors de l\'ajout de l\'image');
+    } else {
+      // Changer la couleur du bouton de validation à vert
+      validationButton.style.backgroundColor = 'green';
+      validationButton.style.color = 'white';
+      alert('Photo ajoutée avec succès !');
+    }
+  })
+  .catch(error => {
+    console.error(error);
+  });
+});
 
 
 
@@ -462,6 +537,8 @@ const button = document.querySelector('btnModifier');
 editionButton.addEventListener('click', openModal);
 
 
+
+  
 
 
 

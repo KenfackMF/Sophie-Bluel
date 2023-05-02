@@ -248,6 +248,11 @@ h1 a{
     color: black;
 }
 
+.log-out{
+	text-decoration: none;
+    list-style-type: none;
+    color: black;
+}
 
 
 .bandeNoir{
@@ -330,33 +335,9 @@ h1 a{
 	
 }
 
-.modal-content2 {
-	position: absolute;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background-color: #fefefe;
-	padding: 20px;
-	width: 630px; 
-	height: 730px;
-	border-radius: 10px;
-	
-}
+
 
 .close-button {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	font-size: 20px;
-	font-weight: bold;
-	color: black;
-	background-color: white;
-	border: none;
-}
-.close-button2 {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -375,13 +356,6 @@ h1 a{
 	margin-top: 40px;	
 }
 
-
-.modalTitle2{
-	font-family: "Work sans" ;
-	font-size: 30px;
-	text-align: center;
-	margin-top: 40px;	
-}
 
 .add-photo{
 	display: flex;
@@ -413,17 +387,11 @@ h1 a{
 	cursor: pointer;
 }
 
+
 .ligne{
 	width: 480px;
 	border-top: 1px solid #B3B3B3;
 	margin-top: 30px;
-}
-
-
-.deconexion{
-	text-decoration: none;
-    list-style-type: none;
-    color: black;
 }
 
 
@@ -436,6 +404,7 @@ h1 a{
 	gap: 10px; /* espacement entre les images */
 	width: 480px;
 	margin: auto;
+	row-gap: 30px;
 
   }
 
@@ -447,7 +416,7 @@ h1 a{
   }
   
   .edit-button {
-	position: relative;
+	position: absolute;
 	padding: 2px;
 	width: 85px;
 	background-color:white;
@@ -455,6 +424,9 @@ h1 a{
 	color: black;
 	font-size: 12px;
 	display: block;
+	font-family: 'Work Sans';
+	font-weight: 400;
+	margin-top: 125px;
   }
   
   .delete-arrows{
@@ -464,6 +436,8 @@ h1 a{
 	padding: 5px;
 	margin-left: 40px;
 	font-size: 12px;
+	cursor: pointer;
+	transition: ease .3s;
   }
 
 	/* positionner l'icône de suppression en haut à droite */
@@ -476,19 +450,154 @@ h1 a{
 	cursor: pointer;
 	margin-left: 65px;
 	margin-top: 0;
+	border: none;
 
   }
-  
 
-.blue-rectangle{
-	width: 420px;
-	height: 170px;
-	background-color: #E8F1F7;
+
+.modal-content2 {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #fefefe;
+	padding: 20px;
+	width: 630px; 
+	height: 730px;
+	border-radius: 10px;
+	
+}
+
+.back-button{
+	position: absolute;
+	background-color: white;
+	left: 10px;
+	border: none;
+	font-size: 20px;
 }
 
 
-.back-button{
+.close-button2 {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 20px;
+	font-weight: bold;
+	color: black;
 	background-color: white;
 	border: none;
-	font-size: 20px;
+}
+
+.modalTitle2{
+	font-family: "Work sans" ;
+	font-size: 30px;
+	text-align: center;
+	margin-top: 40px;	
+}
+
+
+.blue-rectangle{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 20px;
+	width: 480px;
+	height: 240px;
+	background-color: #E8F1F7;
+	margin-top: 30px;
+}
+
+.fa-image{
+	background-color: none;
+	font-size: 80px;
+	color: #B9C5CC;
+	font-weight: 200;
+}
+
+.texte-ajout{
+	display: flex;
+	width: 230px;
+	height: 40px;
+	align-items: center;
+	justify-content: center;
+	border-radius: 60px;
+	font-family: 'Work Sans';
+	font-weight: 500;
+	border: none ;
+	background-color:  #CBD6DC;
+	color: #306685;
+	padding: 1rem;
+	cursor: pointer;
+}
+
+.img-size{
+	font-family: 'Work Sans';
+	font-size: 10px;
+	font-weight: 400;
+
+}
+
+.validation {
+	display: flex;
+	width: 230px;
+	height: 40px;
+	margin-top: 30px;
+	align-items: center;
+	justify-content: center;
+	border-radius: 60px;
+	font-family: 'Syne';
+	font-weight: 700;
+	border: none ;
+	background-color:  #A7A7A7;
+	color: white;
+	padding: 1rem;
+	cursor: pointer;
+  }
+
+
+  .title-label{
+	margin-left: 0;
+	margin-top: 30px;
+	width: 480px;
+	font-size: 18px;
+	font-weight: 500;
+	font-family: 'Work Sans';
+	color: #3D3D3D;
+	margin-bottom: 10px;
+  }
+
+  .title-input{
+	width: 480px;
+	height: 50px;
+	background-color: white;
+	border: none;
+	box-shadow:-1px -1px 8px 6px  rgba(187, 185, 185, 0.15);
+  }
+  .cat-label{
+	margin-left: 0;
+	margin-top: 30px;
+	width: 480px;
+	font-size: 18px;
+	font-weight: 500;
+	font-family: 'Work Sans';
+	color: #3D3D3D;
+	margin-bottom: 10px;
+  }
+
+  .cat-input{
+	width: 480px;
+	height: 50px;
+	background-color: white;
+	border: none;
+	box-shadow:-1px -1px 8px 6px  rgba(187, 185, 185, 0.15);
+  }
+
+  .ligne2{
+	width: 480px;
+	border-top: 1px solid #B3B3B3;
+	margin-top: 50px;
 }
