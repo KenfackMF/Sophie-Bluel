@@ -369,7 +369,6 @@ function genererCatalogue2(catalogueModal) {
 
   }
 
-  // ajouter l'élément div galleryModal à l'élément modalContent (à définir ailleurs)
 }
 
 
@@ -414,7 +413,7 @@ function genererCatalogue2(catalogueModal) {
       modalContent.classList.add('modal-content');
     });
 
-
+    // fermer la modale et le supprime du DOM
     const closeButton2 = document.createElement('button');
     closeButton2.className = 'close-button2';
     closeButton2.textContent = 'X';
@@ -422,7 +421,6 @@ function genererCatalogue2(catalogueModal) {
     
     closeButton2.addEventListener('click', (e) => {
       e.preventDefault()
-      // fermer la modale et le supprime du DOM
       modal.parentNode.removeChild(modal);
     });
   
@@ -437,14 +435,14 @@ function genererCatalogue2(catalogueModal) {
     blueRectangle.classList.add("blue-rectangle");
     modalContent2.appendChild(blueRectangle);
 
-    const imageLost = document.createElement('i');
+    const imageLost = document.createElement('div');
     imageLost.innerHTML = '<i class="fa-regular fa-image"></i>';
     blueRectangle.appendChild(imageLost);
 
-    const texteAjout = document.createElement('button');
-    texteAjout.classList.add('texte-ajout');
-    texteAjout.textContent = 'Ajouter photo'
-    blueRectangle.appendChild(texteAjout);
+    const addImgButton = document.createElement('button');
+    addImgButton.classList.add('texte-ajout');
+    addImgButton.textContent = 'Ajouter photo'
+    blueRectangle.appendChild(addImgButton);
 
     const imgSize = document.createElement('p');
     imgSize.classList.add = 'img-size';
@@ -479,27 +477,24 @@ function genererCatalogue2(catalogueModal) {
     const validationButton = document.createElement('button');
     validationButton.className = 'validation';
     validationButton.textContent = 'Valider';
-    modalContent2.appendChild(validationButton);    
-  });
+    modalContent2.appendChild(validationButton);  
+    
+    
 
 
 
-  // Le button ajout de photo
- const texteAjout = document.createElement('button');
-    texteAjout.classList.add('texte-ajout');
-    texteAjout.textContent = 'Ajouter photo'
-    blueRectangle.appendChild(texteAjout);
-
-// Ajouter un gestionnaire d'événements au bouton de validation
-validationButton.addEventListener('click', () => {
+    // Ajouter un gestionnaire d'événements au bouton d'ajout
+  addImgButton.addEventListener('click', () => {
   // Récupérer les valeurs des champs de titre et de catégorie
   const title = titleInput.value;
   const category = catInput.value;
+  const imageN = imageLost.imageUrl;
 
   // Créer un objet FormData avec les données du formulaire
   const formData = new FormData();
   formData.append('title', title);
   formData.append('category', category);
+  
 
   // Envoyer la requête POST avec les données du formulaire
   fetch('http://localhost:5678/api/works', {
@@ -515,7 +510,7 @@ validationButton.addEventListener('click', () => {
       throw new Error('Une erreur est survenue lors de l\'ajout de l\'image');
     } else {
       // Changer la couleur du bouton de validation à vert
-      validationButton.style.backgroundColor = 'green';
+      validationButton.style.backgroundColor = '#1D615';
       validationButton.style.color = 'white';
       alert('Photo ajoutée avec succès !');
     }
@@ -524,6 +519,22 @@ validationButton.addEventListener('click', () => {
     console.error(error);
   });
 });
+
+
+
+
+
+  });
+
+
+
+  // Le button ajout de photo
+//  const texteAjout = document.createElement('button');
+//     texteAjout.classList.add('texte-ajout');
+//     texteAjout.textContent = 'Ajouter photo'
+//     blueRectangle.appendChild(texteAjout);
+
+
 
 
 
