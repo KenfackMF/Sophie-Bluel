@@ -14,6 +14,8 @@ fetch("http://localhost:5678/api/works")
 function genererCatalogue(catalogue) {
   for (let i = 0; i < catalogue.length; i++) {
     const figurePhoto = document.createElement("figure");
+    figurePhoto.classList.add('figure-gallery');
+    figurePhoto.setAttribute("data-id", catalogue[i].id);
     const imageBal = document.createElement("img");
 
     imageBal.setAttribute("src", catalogue[i].imageUrl);
@@ -251,9 +253,9 @@ function openModal() {
   closeButton.textContent = 'X';
   modalContent.appendChild(closeButton);
   
+  // fermer la modale et le supprime du DOM
   closeButton.addEventListener('click', (e) => {
     e.preventDefault()
-    // fermer la modale et le supprime du DOM
     modal.parentNode.removeChild(modal);
   });
 
@@ -277,14 +279,14 @@ fetch('http://localhost:5678/api/works')
     // stocker les données dans une variable
     const catalogueModal = data;
 
-    // appeler la fonction genererCatalogue2 avec les données en argument
+    // appeler la fonction genererCatalogue2 avec les data en argument
     genererCatalogue2(catalogueModal);
   })
   .catch(error => {
     console.error('Une erreur est survenue lors de la récupération des données de la galerie : ', error);
   });
 
-// définir la fonction genererCatalogue2 en dehors de la chaîne de promesses
+// définir la fonction genererCatalogue2 
 function genererCatalogue2(catalogueModal) {
 
 
@@ -293,6 +295,7 @@ function genererCatalogue2(catalogueModal) {
     // créer un élément div pour contenir chaque image
     const imgContainer = document.createElement('div');
     imgContainer.className = 'img-container';
+    imgContainer.setAttribute('data-id',  catalogueModal[i].id);
 
     // créer un élément img pour afficher l'image
     const img = document.createElement('img');
@@ -320,7 +323,7 @@ function genererCatalogue2(catalogueModal) {
       deleteArrows.style.display = 'none';
     });
 
-     // créer un bouton d'édition pour chaque image
+     // créer un bouton 'éditer' pour chaque image
      const editButton = document.createElement('p');
      editButton.className = 'edit-button';
      editButton.textContent = 'Editer';
@@ -336,33 +339,96 @@ function genererCatalogue2(catalogueModal) {
     galleryModal.appendChild(imgContainer);
 
 
-  // Ajouter un écouteur d'événement "click" sur le bouton de suppression "deleteButton" de chaque image
-  const deleteButtons = document.querySelectorAll('.delete-button');
-  deleteButtons.forEach((deleteButton) => {
-    deleteButton.addEventListener('click', () => {
-      const imageId = deleteButton.parentNode.dataset.id;
-          
-      const imgContainer = deleteButton.parentNode;
-      imgContainer.parentNode.removeChild(imgContainer);
-      
-      fetch(`http://localhost:5678/api/works/${imageId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Une erreur est survenue lors de la suppression de l\'image');
-        }else{
-          alert('Projet supprimer avec succès !')
-        }
-      })
-      .catch(error => {
-        console.error(error);
-      });
+
+    // ajouter un écouteur d'événement pour supprimer l'image
+deleteButton.addEventListener('click', () => {
+  const imageId = img.getAttribute('data-id'); // récupérer l'ID de l'image
+  const imageToDelete = document.querySelector(`.img-container [data-id="${imageId}"]`); // trouver l'élément imgContainer correspondant à l'ID
+
+  if (imageToDelete) {
+    imageToDelete.remove(); // supprimer l'élément imgContainer
+  }
+});
+
+
+
+
+const deleteButtons = document.querySelectorAll('.delete-button');
+deleteButtons.forEach((deleteButton) => {
+  deleteButton.addEventListener('click', () => {
+    const container = deleteButton.parentNode;
+    const containerId = container.dataset.id; // la valeur de l'attribut "data-id" de l'image
+    container.remove(); // supprime le container qui contient l'image du DOM
+
+    const galleryFigures = document.querySelectorAll('figure-gallery');
+
+    for (let i = 0; i < galleryFigures.length; i++) {
+      const figure = galleryFigures[i];
+      if (figure.dataset.id === containerId) {
+        figure.remove();
+        break; // arrête la boucle une fois que la figure est trouvée et supprimée
+      }
+    }
+
+    console.log(containerId);
+
+    fetch(`http://localhost:5678/api/works/${containerId}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': '*/*',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Une erreur est survenue lors de la suppression de l\'image');
+      } else {
+        alert('Projet supprimé avec succès !');
+      }
+    })
+    .catch(error => {
+      console.error(error);
     });
   });
+});
+
+
+
+
+
+
+
+  // // Ajouter un écouteur d'événement "click" sur le bouton de suppression "deleteButton" de chaque image
+  // const deleteButtons = document.querySelectorAll('.delete-button');
+  // deleteButtons.forEach((deleteButton) => {
+  //   deleteButton.addEventListener('click', () => {
+  //     const container = deleteButton.parentNode;
+  //     const imageId = immageContainer // recuperer la balise image dans containeer image et dataset.id cette balise img
+  //     console.log(imageId);
+
+  //      console.log(deleteButton); 
+  //      console.log(deleteButton.parentNode);
+  //     // const imgContainer = deleteButton.parentNode;
+  //     // imgContainer.parentNode.removeChild(imgContainer);
+
+  //     fetch(`http://localhost:5678/api/works/${imageId}`, {
+  //       method: 'DELETE',
+  //       headers: {
+  //         'Authorization': `Bearer ${localStorage.getItem('token')}`
+  //       }
+  //     })
+  //     .then(response => {
+  //       if (!response.ok) {
+  //         throw new Error('Une erreur est survenue lors de la suppression de l\'image');
+  //       }else{
+  //         alert('Projet supprimer avec succès !')
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+  //   });
+  // });
 
 
 
@@ -424,7 +490,7 @@ function genererCatalogue2(catalogueModal) {
       modal.parentNode.removeChild(modal);
     });
   
-  
+  // ajouter les lement de la mopale2
     const modalText2 = document.createElement('p');
     modalText2.className = 'modalTitle2'
     modalText2.textContent = 'Ajout photo';
@@ -473,22 +539,18 @@ function genererCatalogue2(catalogueModal) {
   
   
   
-    // Le button ajout de photo
+    // Le button valisation de l'ajout de photo
     const validationButton = document.createElement('button');
     validationButton.className = 'validation';
     validationButton.textContent = 'Valider';
     modalContent2.appendChild(validationButton);  
-    
-    
 
 
 
     // Ajouter un gestionnaire d'événements au bouton d'ajout
   addImgButton.addEventListener('click', () => {
-  // Récupérer les valeurs des champs de titre et de catégorie
   const title = titleInput.value;
   const category = catInput.value;
-  const imageN = imageLost.imageUrl;
 
   // Créer un objet FormData avec les données du formulaire
   const formData = new FormData();
@@ -552,9 +614,11 @@ editionButton.addEventListener('click', openModal);
   
 
 
-
-
-
-
-
   }
+
+
+
+
+
+  // Code copié
+  
