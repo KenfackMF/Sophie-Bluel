@@ -360,7 +360,7 @@ deleteButtons.forEach((deleteButton) => {
     const containerId = container.dataset.id; // la valeur de l'attribut "data-id" de l'image
     container.remove(); // supprime le container qui contient l'image du DOM
 
-    const galleryFigures = document.querySelectorAll('figure-gallery');
+    const galleryFigures = document.querySelectorAll('.figure-gallery');
 
     for (let i = 0; i < galleryFigures.length; i++) {
       const figure = galleryFigures[i];
@@ -382,55 +382,13 @@ deleteButtons.forEach((deleteButton) => {
     .then(response => {
       if (!response.ok) {
         throw new Error('Une erreur est survenue lors de la suppression de l\'image');
-      } else {
-        alert('Projet supprimé avec succès !');
-      }
+      } 
     })
     .catch(error => {
       console.error(error);
     });
   });
 });
-
-
-
-
-
-
-
-  // // Ajouter un écouteur d'événement "click" sur le bouton de suppression "deleteButton" de chaque image
-  // const deleteButtons = document.querySelectorAll('.delete-button');
-  // deleteButtons.forEach((deleteButton) => {
-  //   deleteButton.addEventListener('click', () => {
-  //     const container = deleteButton.parentNode;
-  //     const imageId = immageContainer // recuperer la balise image dans containeer image et dataset.id cette balise img
-  //     console.log(imageId);
-
-  //      console.log(deleteButton); 
-  //      console.log(deleteButton.parentNode);
-  //     // const imgContainer = deleteButton.parentNode;
-  //     // imgContainer.parentNode.removeChild(imgContainer);
-
-  //     fetch(`http://localhost:5678/api/works/${imageId}`, {
-  //       method: 'DELETE',
-  //       headers: {
-  //         'Authorization': `Bearer ${localStorage.getItem('token')}`
-  //       }
-  //     })
-  //     .then(response => {
-  //       if (!response.ok) {
-  //         throw new Error('Une erreur est survenue lors de la suppression de l\'image');
-  //       }else{
-  //         alert('Projet supprimer avec succès !')
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //     });
-  //   });
-  // });
-
-
 
 
   }
