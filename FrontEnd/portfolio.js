@@ -415,6 +415,14 @@ deleteButtons.forEach((deleteButton) => {
   modalContent.appendChild(buttonErase);
 
 
+  buttonErase.addEventListener('click', (e) => {
+    e.preventDefault();
+    supprimerTouteLaGalerie();
+});
+
+
+
+
   // Créer la modale2 pour l'ajout de photo
   addPhotoButton.addEventListener('click', function() {
 
@@ -463,33 +471,120 @@ deleteButtons.forEach((deleteButton) => {
     imageLost.innerHTML = '<i class="fa-regular fa-image"></i>';
     blueRectangle.appendChild(imageLost);
 
-    const addImgButton = document.createElement('button');
-    addImgButton.classList.add('texte-ajout');
-    addImgButton.textContent = 'Ajouter photo'
-    blueRectangle.appendChild(addImgButton);
 
+
+
+    const labelText = document.createElement('span');
+    labelText.textContent = '+ Ajouter photo';
+    labelText.classList.add('texte-ajout');
+    blueRectangle.appendChild(labelText);
+  
+    const imageInput = document.createElement('input');
+    imageInput.classList.add('input-ajout');
+    imageInput.label = '+ Ajouter photo';
+    imageInput.value = '';
+    imageInput.accept = '.jpg, .png';
+    imageInput.type = 'file';
+    labelText.appendChild(imageInput);
+  
+    imageInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+  
+      reader.onload = function(e) {
+        const imageUrl = e.target.result;
+  
+        // Supprimer le contenu existant de blueRectangle
+        blueRectangle.innerHTML = '';
+  
+        // Créer un élément <img> pour afficher l'image importée
+        const imageElement = document.createElement('img');
+        imageElement.src = imageUrl;
+        imageElement.style.maxWidth = '30%'; 
+        blueRectangle.appendChild(imageElement);
+      };
+  
+      reader.readAsDataURL(file);
+    });
+
+
+
+    
     const imgSize = document.createElement('p');
     imgSize.classList.add = 'img-size';
     imgSize.innerText = 'jpg, png : 4mo max';
     blueRectangle.appendChild(imgSize);
 
+
     const titleLabel = document.createElement("label");
     titleLabel.innerHTML = "Titre";
     titleLabel.classList.add('title-label');
     modalContent2.appendChild(titleLabel);
+    
     const titleInput = document.createElement("input");
     titleInput.setAttribute("type", "text");
     titleInput.classList.add('title-input');
     modalContent2.appendChild(titleInput);
 
+
+    //menu déroulant des catégories
     const catLabel = document.createElement("label");
-   catLabel.innerHTML = "Catégorie";
-   catLabel.classList.add('cat-label');
+    catLabel.innerHTML = "Catégories";
+    catLabel.classList.add('cat-label');
     modalContent2.appendChild(catLabel);
-   const catInput = document.createElement("input");
-  catInput.setAttribute("type", "text");
-  catInput.classList.add('cat-input');
+
+
+    const catInput = document.createElement("input");
+    catInput.setAttribute("type", "text");
+    catInput.classList.add('cat-input');
     modalContent2.appendChild(catInput);
+
+
+
+    // Récupérer les catégories depuis l'API (exemple avec fetch())
+fetch('http://localhost:5678/api/works')
+.then(response => response.json())
+.then(data => {
+  const categories = data.categories; // Supposons que les catégories sont dans une propriété "categories" de la réponse JSON
+console.log(data.categories);
+  // Créer l'élément select pour le menu déroulant
+  const selectMenu = document.createElement('select');
+  selectMenu.classList.add('dropdown-menu');
+  catInput.appendChild(selectMenu);
+
+  // les menu déroulant à partir des catégories
+  categories.forEach(category => {
+    const option = document.createElement('option');
+    option.value = category.id; 
+    option.text = category.name; 
+    selectMenu.appendChild(option);
+  });
+})
+
+
+
+
+
+.catch(error => {
+  console.error('Une erreur s\'est produite lors de la récupération des catégories:', error);
+
+
+
+  if (response.ok) {
+    // Activation du bouton si la réponse est OK
+    validationButton.disabled = false;
+  } else {
+    // Désactivation du bouton si la réponse n'est pas OK
+    validationButton.disabled = true;
+  }
+
+
+
+
+});
+
+
+  
 
     const traisGris2 = document.createElement('div');
     traisGris2.className = 'ligne2';
@@ -501,60 +596,12 @@ deleteButtons.forEach((deleteButton) => {
     const validationButton = document.createElement('button');
     validationButton.className = 'validation';
     validationButton.textContent = 'Valider';
-    modalContent2.appendChild(validationButton);  
-
-
-
-    // Ajouter un gestionnaire d'événements au bouton d'ajout
-  addImgButton.addEventListener('click', () => {
-  const title = titleInput.value;
-  const category = catInput.value;
-
-  // Créer un objet FormData avec les données du formulaire
-  const formData = new FormData();
-  formData.append('title', title);
-  formData.append('category', category);
-  
-
-  // Envoyer la requête POST avec les données du formulaire
-  fetch('http://localhost:5678/api/works', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    },
-    body: formData
-  })
-  .then(response => {
-    console.log(response)
-    if (!response.ok) {
-      throw new Error('Une erreur est survenue lors de l\'ajout de l\'image');
-    } else {
-      // Changer la couleur du bouton de validation à vert
-      validationButton.style.backgroundColor = '#1D615';
-      validationButton.style.color = 'white';
-      alert('Photo ajoutée avec succès !');
-    }
-  })
-  .catch(error => {
-    console.error(error);
-  });
-});
-
+    modalContent2.appendChild(validationButton); 
 
 
 
 
   });
-
-
-
-  // Le button ajout de photo
-//  const texteAjout = document.createElement('button');
-//     texteAjout.classList.add('texte-ajout');
-//     texteAjout.textContent = 'Ajouter photo'
-//     blueRectangle.appendChild(texteAjout);
-
-
 
 
 
@@ -578,5 +625,5 @@ editionButton.addEventListener('click', openModal);
 
 
 
-  // Code copié
+
   
