@@ -534,6 +534,12 @@ h1 a{
 	cursor: pointer;
 }
 
+.input-ajout{
+	position: absolute;
+	cursor: pointer;
+
+}
+
 .img-size{
 	font-family: 'Work Sans';
 	font-size: 10px;

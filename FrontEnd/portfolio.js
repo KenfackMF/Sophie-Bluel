@@ -481,14 +481,23 @@ deleteButtons.forEach((deleteButton) => {
   
     const imageInput = document.createElement('input');
     imageInput.classList.add('input-ajout');
-    imageInput.label = '+ Ajouter photo';
-    imageInput.value = '';
     imageInput.accept = '.jpg, .png';
     imageInput.type = 'file';
+    imageInput.style.opacity = '0';
     labelText.appendChild(imageInput);
+    
   
     imageInput.addEventListener('change', function(e) {
       const file = e.target.files[0];
+
+  // Vérifier la taille de l'image (en bytes)
+  const maxSizeInBytes = 4 * 1024 * 1024; // 4MB
+  if (file.size > maxSizeInBytes) {
+    alert('La taille de l\'image dépasse la limite maximale autorisée.');
+    imageInput.value = ''; // Réinitialiser la sélection de fichier
+    return; // Arrêter l'exécution du reste de la fonction
+  }
+
       const reader = new FileReader();
   
       reader.onload = function(e) {
@@ -498,10 +507,10 @@ deleteButtons.forEach((deleteButton) => {
         blueRectangle.innerHTML = '';
   
         // Créer un élément <img> pour afficher l'image importée
-        const imageElement = document.createElement('img');
-        imageElement.src = imageUrl;
-        imageElement.style.maxWidth = '30%'; 
-        blueRectangle.appendChild(imageElement);
+        const imageImport = document.createElement('img');
+        imageImport.src = imageUrl;
+        imageImport.style.maxWidth = '30%'; 
+        blueRectangle.appendChild(imageImport);
       };
   
       reader.readAsDataURL(file);
@@ -534,23 +543,21 @@ deleteButtons.forEach((deleteButton) => {
     modalContent2.appendChild(catLabel);
 
 
-    const catInput = document.createElement("input");
-    catInput.setAttribute("type", "text");
+    const catInput = document.createElement("div");
     catInput.classList.add('cat-input');
     modalContent2.appendChild(catInput);
 
 
 
     // Récupérer les catégories depuis l'API (exemple avec fetch())
-fetch('http://localhost:5678/api/works')
+fetch('http://localhost:5678/api/categories')
 .then(response => response.json())
 .then(data => {
-  const categories = data.categories; // Supposons que les catégories sont dans une propriété "categories" de la réponse JSON
-console.log(data.categories);
+  const categories = data; // Supposons que les catégories sont dans une propriété "categories" de la réponse JSON
+console.log(categories);
   // Créer l'élément select pour le menu déroulant
   const selectMenu = document.createElement('select');
   selectMenu.classList.add('dropdown-menu');
-  catInput.appendChild(selectMenu);
 
   // les menu déroulant à partir des catégories
   categories.forEach(category => {
@@ -558,25 +565,15 @@ console.log(data.categories);
     option.value = category.id; 
     option.text = category.name; 
     selectMenu.appendChild(option);
+    
   });
+  catInput.appendChild(selectMenu);
+
 })
-
-
-
 
 
 .catch(error => {
   console.error('Une erreur s\'est produite lors de la récupération des catégories:', error);
-
-
-
-  if (response.ok) {
-    // Activation du bouton si la réponse est OK
-    validationButton.disabled = false;
-  } else {
-    // Désactivation du bouton si la réponse n'est pas OK
-    validationButton.disabled = true;
-  }
 
 
 
@@ -593,9 +590,11 @@ console.log(data.categories);
   
   
     // Le button valisation de l'ajout de photo
-    const validationButton = document.createElement('button');
+    const validationButton = document.createElement('input');
+    validationButton.type = 'submit';
+    validationButton.disabled = true;
     validationButton.className = 'validation';
-    validationButton.textContent = 'Valider';
+    validationButton.value = 'Valider';
     modalContent2.appendChild(validationButton); 
 
 
@@ -603,8 +602,9 @@ console.log(data.categories);
 
   });
 
-
-
+// ecouter l'evenment input du formulaire pour activé le button submit (verifier si le select et l'input texte sont valide ainsi que l'image si ok passé le disable en false)
+// changer le button valider en "submit"
+// au click du btton, on récupère la value de l'image, le titre et la catégories et on crée un formData et ce formData qui sera mis dans le body de la requète POST
 }
 
 
