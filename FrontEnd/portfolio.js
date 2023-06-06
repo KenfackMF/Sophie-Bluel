@@ -426,54 +426,48 @@ deleteButtons.forEach((deleteButton) => {
   // Créer la modale2 pour l'ajout de photo
   addPhotoButton.addEventListener('click', function() {
 
-  
     // Les éléments pour le contenu de la modale2
     const modalContent2 = document.createElement('div');
     modalContent2.className = 'modal-content2';
     modal.appendChild(modalContent2);
-    
+  
     const backButton = document.createElement("button");
     backButton.classList.add("back-button");
     backButton.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
     modalContent2.appendChild(backButton);
-      
+  
     // retour à la première modal
-
     backButton.addEventListener('click', (e) => {
       e.preventDefault()
       modalContent2.style.display = "none";
       modalContent.classList.add('modal-content');
     });
-
+  
     // fermer la modale et le supprime du DOM
     const closeButton2 = document.createElement('button');
     closeButton2.className = 'close-button2';
     closeButton2.textContent = 'X';
     modalContent2.appendChild(closeButton2);
-    
+  
     closeButton2.addEventListener('click', (e) => {
       e.preventDefault()
       modal.parentNode.removeChild(modal);
     });
   
-  // ajouter les lement de la mopale2
+    // ajouter les éléments de la modale2
     const modalText2 = document.createElement('p');
     modalText2.className = 'modalTitle2'
     modalText2.textContent = 'Ajout photo';
     modalContent2.appendChild(modalText2);
-
-
+  
     const blueRectangle = document.createElement("div");
     blueRectangle.classList.add("blue-rectangle");
     modalContent2.appendChild(blueRectangle);
-
+  
     const imageLost = document.createElement('div');
     imageLost.innerHTML = '<i class="fa-regular fa-image"></i>';
     blueRectangle.appendChild(imageLost);
-
-
-
-
+  
     const labelText = document.createElement('span');
     labelText.textContent = '+ Ajouter photo';
     labelText.classList.add('texte-ajout');
@@ -485,19 +479,20 @@ deleteButtons.forEach((deleteButton) => {
     imageInput.type = 'file';
     imageInput.style.opacity = '0';
     labelText.appendChild(imageInput);
-    
+  
+    let file; //  variable a utiliser dans d'autres parties du code
   
     imageInput.addEventListener('change', function(e) {
-      const file = e.target.files[0];
-
-  // Vérifier la taille de l'image (en bytes)
-  const maxSizeInBytes = 4 * 1024 * 1024; // 4MB
-  if (file.size > maxSizeInBytes) {
-    alert('La taille de l\'image dépasse la limite maximale autorisée.');
-    imageInput.value = ''; // Réinitialiser la sélection de fichier
-    return; // Arrêter l'exécution du reste de la fonction
-  }
-
+      file = e.target.files[0];
+  
+      // Vérifier la taille de l'image n'eest pas su^érieur à 4mo
+      const maxSizeInBytes = 4 * 1024 * 1024; 
+      if (file.size > maxSizeInBytes) {
+        alert('La taille de l\'image dépasse la limite maximale autorisée.');
+        imageInput.value = ''; 
+        return; // Arrêter l'exécution du reste de la fonction
+      }
+  
       const reader = new FileReader();
   
       reader.onload = function(e) {
@@ -509,98 +504,143 @@ deleteButtons.forEach((deleteButton) => {
         // Créer un élément <img> pour afficher l'image importée
         const imageImport = document.createElement('img');
         imageImport.src = imageUrl;
-        imageImport.style.maxWidth = '30%'; 
+        imageImport.style.maxWidth = '30%';
         blueRectangle.appendChild(imageImport);
+  
+        // Vérifier si tous les champs sont valides pour activer le bouton de validation
+        validationCheck();
       };
   
       reader.readAsDataURL(file);
     });
-
-
-
-    
+  
     const imgSize = document.createElement('p');
-    imgSize.classList.add = 'img-size';
+    imgSize.classList.add('img-size');
     imgSize.innerText = 'jpg, png : 4mo max';
     blueRectangle.appendChild(imgSize);
-
-
+  
     const titleLabel = document.createElement("label");
     titleLabel.innerHTML = "Titre";
     titleLabel.classList.add('title-label');
     modalContent2.appendChild(titleLabel);
-    
+  
     const titleInput = document.createElement("input");
     titleInput.setAttribute("type", "text");
     titleInput.classList.add('title-input');
     modalContent2.appendChild(titleInput);
-
-
+  
     //menu déroulant des catégories
     const catLabel = document.createElement("label");
     catLabel.innerHTML = "Catégories";
     catLabel.classList.add('cat-label');
     modalContent2.appendChild(catLabel);
-
-
+  
     const catInput = document.createElement("div");
     catInput.classList.add('cat-input');
     modalContent2.appendChild(catInput);
-
-
-
-    // Récupérer les catégories depuis l'API (exemple avec fetch())
-fetch('http://localhost:5678/api/categories')
-.then(response => response.json())
-.then(data => {
-  const categories = data; // Supposons que les catégories sont dans une propriété "categories" de la réponse JSON
-console.log(categories);
-  // Créer l'élément select pour le menu déroulant
-  const selectMenu = document.createElement('select');
-  selectMenu.classList.add('dropdown-menu');
-
-  // les menu déroulant à partir des catégories
-  categories.forEach(category => {
-    const option = document.createElement('option');
-    option.value = category.id; 
-    option.text = category.name; 
-    selectMenu.appendChild(option);
-    
-  });
-  catInput.appendChild(selectMenu);
-
-})
-
-
-.catch(error => {
-  console.error('Une erreur s\'est produite lors de la récupération des catégories:', error);
-
-
-
-
-});
-
-
   
-
+    // Récupérer fetch por recuperer les cats
+    fetch('http://localhost:5678/api/categories')
+      .then(response => response.json())
+      .then(data => {
+        const categories = data; 
+  
+        // Créer l'élément select pour le menu déroulant
+        const selectMenu = document.createElement('select');
+        selectMenu.classList.add('select-menu');
+  
+        // Création de l'élément div parent
+        const customSelect = document.createElement('div');
+        customSelect.classList.add('custom-select');
+  
+        // Création de l'élément div pour le chevron
+        const selectArrow = document.createElement('div');
+        selectArrow.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+        selectArrow.classList.add('select-arrow');
+  
+        // Ajout des elements aux parents
+        selectMenu.appendChild(selectArrow);
+  
+        customSelect.appendChild(selectMenu);
+  
+        catInput.appendChild(customSelect);
+  
+        // les menu déroulant à partir des catégories
+        categories.forEach(category => {
+          const option = document.createElement('option');
+          option.value = category.id;
+          option.text = category.name;
+          selectMenu.appendChild(option);
+        });
+  
+        // Vérifier si tous les champs sont valides pour activer le bouton de validation
+        validationCheck();
+      })
+      .catch(error => {
+        console.error('Une erreur s\'est produite lors de la récupération des catégories:', error);
+      });
+  
     const traisGris2 = document.createElement('div');
     traisGris2.className = 'ligne2';
     modalContent2.appendChild(traisGris2);
   
-  
-  
-    // Le button valisation de l'ajout de photo
+    // Le bouton validation de l'ajout de photo
     const validationButton = document.createElement('input');
-    validationButton.type = 'submit';
+    validationButton.type = 'button';
     validationButton.disabled = true;
     validationButton.className = 'validation';
     validationButton.value = 'Valider';
-    modalContent2.appendChild(validationButton); 
+    modalContent2.appendChild(validationButton);
+  
+    function validationCheck() {
+  
+      // Vérifier si le select, l'input texte et l'image sont valides
+      const selectValue = selectMenu.value;
+      const textValue = titleInput.value;
+      const imageValid = file && file.size <= maxSizeInBytes;
+  
+      // Activer ou désactiver le bouton de soumission en fonction de la validité des champs
+      if (selectValue && textValue && imageValid) {
+        validationButton.disabled = false;
+        validationButton.style.backgroundColor = '#1D6154';
+      } else {
+        validationButton.disabled = true;
+        validationButton.style.backgroundColor = '';
+      }
+    }
+  
+    validationButton.addEventListener('click', function() {
+      const imageValue = imageInput.value;
+      const titleValue = titleInput.value;
+      const categoryValue = selectMenu.value;
+    
+      // Vérifier si tous les champs sont remplis
+      if (imageValue && titleValue && categoryValue) {
+        // Créer un nouvel objet FormData et ajouter les valeurs des champs
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('title', titleValue);
+        formData.append('category', categoryValue);
+    
+        // Envoyer la requête POST avec les données du formulaire
+        fetch('http://localhost:5678/api/works', {
+          method: 'POST',
+          body: formData
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+          })
+          .catch(error => {
+            console.error('Une erreur s\'est produite lors de l\'envoi de la requête:', error);
+          });
+      }
 
 
-
-
+    });
+  
   });
+  
 
 // ecouter l'evenment input du formulaire pour activé le button submit (verifier si le select et l'input texte sont valide ainsi que l'image si ok passé le disable en false)
 // changer le button valider en "submit"
