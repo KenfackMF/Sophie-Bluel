@@ -279,7 +279,7 @@ fetch('http://localhost:5678/api/works')
     // stocker les données dans une variable
     const catalogueModal = data;
 
-    // appeler la fonction genererCatalogue2 avec les data en argument
+    // appeler la fonction genererCatalogue2  avec les data en argument
     genererCatalogue2(catalogueModal);
   })
   .catch(error => {
@@ -295,6 +295,8 @@ function genererCatalogue2(catalogueModal) {
     // créer un élément div pour contenir chaque image
     const imgContainer = document.createElement('div');
     imgContainer.className = 'img-container';
+       // ajouter l'élément div imgContainer à l'élément div galleryModal
+       galleryModal.appendChild(imgContainer);
     imgContainer.setAttribute('data-id',  catalogueModal[i].id);
 
     // créer un élément img pour afficher l'image
@@ -335,8 +337,7 @@ function genererCatalogue2(catalogueModal) {
     imgContainer.appendChild(deleteArrows);
     imgContainer.appendChild(img);
 
-    // ajouter l'élément div imgContainer à l'élément div galleryModal
-    galleryModal.appendChild(imgContainer);
+ 
 
 
 
@@ -481,12 +482,12 @@ deleteButtons.forEach((deleteButton) => {
     labelText.appendChild(imageInput);
   
     let file; //  variable a utiliser dans d'autres parties du code
-  
+    const maxSizeInBytes = 4 * 1024 * 1024; 
+
     imageInput.addEventListener('change', function(e) {
       file = e.target.files[0];
   
       // Vérifier la taille de l'image n'eest pas su^érieur à 4mo
-      const maxSizeInBytes = 4 * 1024 * 1024; 
       if (file.size > maxSizeInBytes) {
         alert('La taille de l\'image dépasse la limite maximale autorisée.');
         imageInput.value = ''; 
@@ -528,7 +529,10 @@ deleteButtons.forEach((deleteButton) => {
     titleInput.setAttribute("type", "text");
     titleInput.classList.add('title-input');
     modalContent2.appendChild(titleInput);
-  
+
+    titleInput.addEventListener('input', validationCheck);
+     
+    
     //menu déroulant des catégories
     const catLabel = document.createElement("label");
     catLabel.innerHTML = "Catégories";
@@ -538,32 +542,32 @@ deleteButtons.forEach((deleteButton) => {
     const catInput = document.createElement("div");
     catInput.classList.add('cat-input');
     modalContent2.appendChild(catInput);
+
+      // Créer l'élément select pour le menu déroulant
+      const selectMenu = document.createElement('select');
+      selectMenu.classList.add('select-menu');
+  
+      // Création de l'élément div parent
+      const customSelect = document.createElement('div');
+      customSelect.classList.add('custom-select');
+
+      // Création de l'élément div pour le chevron
+      const selectArrow = document.createElement('div');
+      selectArrow.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+      selectArrow.classList.add('select-arrow');
+
+      // Ajout des elements aux parents
+      selectMenu.appendChild(selectArrow);
+
+      customSelect.appendChild(selectMenu);
+
+      catInput.appendChild(customSelect);
   
     // Récupérer fetch por recuperer les cats
     fetch('http://localhost:5678/api/categories')
       .then(response => response.json())
       .then(data => {
         const categories = data; 
-  
-        // Créer l'élément select pour le menu déroulant
-        const selectMenu = document.createElement('select');
-        selectMenu.classList.add('select-menu');
-  
-        // Création de l'élément div parent
-        const customSelect = document.createElement('div');
-        customSelect.classList.add('custom-select');
-  
-        // Création de l'élément div pour le chevron
-        const selectArrow = document.createElement('div');
-        selectArrow.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
-        selectArrow.classList.add('select-arrow');
-  
-        // Ajout des elements aux parents
-        selectMenu.appendChild(selectArrow);
-  
-        customSelect.appendChild(selectMenu);
-  
-        catInput.appendChild(customSelect);
   
         // les menu déroulant à partir des catégories
         categories.forEach(category => {
@@ -625,15 +629,41 @@ deleteButtons.forEach((deleteButton) => {
         // Envoyer la requête POST avec les données du formulaire
         fetch('http://localhost:5678/api/works', {
           method: 'POST',
+          headers: {
+            'Accept': '*/*',
+            'Authorization': `Bearer ${token}`
+          },
           body: formData
         })
           .then(response => response.json())
           .then(data => {
+            // Traiter ici la réponse de l'API, afficher l'image dans "galleryModal" et dans "container"
+           document.querySelector('.modal')
+            modal.remove();
+           
+            const figureImport = document.createElement('figure');
+            figureImport.className = 'figure-Import';
+            figureImport.setAttribute("src", photo.imageUrl);
+
+            const imgImport = document.createElement('img');
+            imgImport.src = data.photo.imageUrl;
+
+            const photoTitre = document.createElement('p');
+            photoTitre.innerText = data.photo.title;
+           
+            document.querySelector('.gallery');
+        
+            gallery.appendChild(figureImport);
+            figureImport.appendChild(imgImport);
+            figureImport.appendChild(photoTitre);
+           
+           
             console.log(data);
           })
           .catch(error => {
             console.error('Une erreur s\'est produite lors de l\'envoi de la requête:', error);
           });
+        
       }
 
 
